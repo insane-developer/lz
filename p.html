@@ -1,0 +1,362 @@
+<!doctype html>
+<meta charset="utf-8"/>
+<style>
+    html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        font-family: 'Liberaion Sans', 'Arial', sans-serif;
+
+    }
+    h1 {
+        font-family: 'Liberation Serif', 'Calibri', serif;
+        font-weight: normal;
+        text-align: center;
+    }
+    .bigger {
+        font-size: 4em;
+    }
+    code {
+        display: block;
+    }
+    li {
+        margin: 0.2em 0;
+    }
+</style>
+<link href="./prism.css" rel="stylesheet"/>
+<script src="./prism.js"></script>
+<template id="presentation">
+    <style>
+        .content {
+            display: grid;
+            grid-auto-rows: 100vh;
+            grid-auto-columns: 100vw;
+            grid-gap: 1vh;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+        :host([overview]) .content { 
+            font-size: 1vh;
+            width: auto;
+            height: auto;
+            overflow: auto;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: 20vh;
+            grid-auto-columns: 20vw;
+        }
+    </style>
+    <div class="content">
+        <slot/>
+    </div>
+</template>
+<template id="slide">
+    <style>
+        :host {
+            background: #eee;
+        }
+        .border {
+            box-sizing: border-box;
+            width: 100%;
+            height: 100%;
+            box-shadow: inset 0 0 5em rgba(193, 195, 63, 0.8);
+            padding: 3%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        :host([centered]) .border {
+            justify-content: center;
+        }
+
+        .content {
+            min-width: 60%;
+            max-width: 100%;
+            max-height: 100%;
+            overflow: hidden;
+        }
+    </style>
+    <div class="border">
+        <div class="content">
+            <slot/>
+        </div>
+    </div>
+</template>
+<template id="lz77">
+    <style>
+        :host {
+            --input-color: #8de867;        
+            --input-frame: #8de867;
+        }
+        .content {
+            padding: 2px;
+        }
+        .field,
+        .over {
+            margin: 0;
+            padding: 0;
+            line-height: 1.1;
+            border: 0;
+            outline: none;
+            background: none;
+        }
+        .field {
+            width: 100%;
+            border-bottom: 1px solid var(--input-color);
+        }
+        .over {
+            position: absolute;
+            top:0;
+            left: 0;
+            pointer-events: none;
+        }
+        .input {
+            position: relative;
+        }
+        .resbox {
+            position: relative;
+            margin: 0.5em;
+        }
+        .padding,
+        .frame {
+            color: rgba(0,0,0,0);
+        }
+        .cursor .frame {
+            outline: 1px solid var(--input-frame);
+        }
+        .match .frame,
+        .resmatch .frame {
+            color: red;
+        }
+        .input,
+        .field,
+        .resbox {
+            font-size: 1em;
+            font-family: monospace;
+        }
+    </style>
+    <div class="content">
+        <div class="input">
+            <input class="field"></input>
+            <div class="over match">
+                <span class="padding"></span><span class="frame"></span>
+            </div>
+            <div class="over cursor">
+                <span class="padding"></span><span class="frame"></span>
+            </div>
+        </div>
+    </div>
+    <div class="resbox">
+        <div class="result"></div>
+        <div class="over resmatch">
+            <span class="padding"></span><span class="frame"></span>
+        </div>
+    </div>
+</template>
+<template id="lzw">
+    <style>
+        :host {
+            --input-color: #8de867;        
+            --input-frame: #8de867;
+        }
+        .content {
+            padding: 2px;
+        }
+        .field,
+        .over {
+            margin: 0;
+            padding: 0;
+            line-height: 1.1;
+            border: 0;
+            outline: none;
+            background: none;
+        }
+        .field {
+            width: 100%;
+            border-bottom: 1px solid var(--input-color);
+        }
+        .over {
+            position: absolute;
+            top:0;
+            left: 0;
+            pointer-events: none;
+        }
+        .input {
+            position: relative;
+        }
+        .resbox {
+            position: relative;
+            margin: 0.5em;
+        }
+        .padding,
+        .frame {
+            color: rgba(0,0,0,0);
+        }
+        .cursor .frame {
+            outline: 1px solid var(--input-frame);
+        }
+        .match .frame,
+        .resmatch .frame {
+            color: red;
+        }
+        .input,
+        .field,
+        .dict,
+        .resbox {
+            font-size: 1em;
+            font-family: monospace;
+        }
+        .bottom {
+            marign-top: 0.5em;
+        }
+        .dict {
+            margin: 0;
+            padding: 0;
+            counter-reset: list -1;
+            columns: auto 6;
+            min-height: 10vh;
+        }
+        .dict li {
+            list-style: none;
+        }
+        .dict li:before {
+            counter-increment: list 1;
+            content: counter(list) ":'";
+            opacity: 0.6;
+        }
+        .dict li:after {
+            content: "'";
+            opacity: 0.6;
+        }
+    </style>
+    <div class="content">
+        <div class="input">
+            <input class="field"></input>
+            <div class="over match">
+                <span class="padding"></span><span class="frame"></span>
+            </div>
+            <div class="over cursor">
+                <span class="padding"></span><span class="frame"></span>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <ol class="dict"></ol>
+        <div class="resbox">
+            <div class="result"></div>
+            <div class="over resmatch">
+                <span class="padding"></span><span class="frame"></span>
+            </div>
+        </div>
+    </div>
+</template>
+<template id="lzdiff">
+    <style>
+        :host {
+            --input-color: #8de867;        
+            --input-frame: #8de867;
+        }
+        .content {
+            padding: 2px;
+        }
+        .field,
+        .over {
+            margin: 0;
+            padding: 0;
+            line-height: 1.1;
+            border: 0;
+            outline: none;
+            background: none;
+        }
+        .field {
+            width: 100%;
+            border-bottom: 1px solid var(--input-color);
+        }
+        .over {
+            position: absolute;
+            top:0;
+            left: 0;
+            pointer-events: none;
+        }
+        .input,
+        .output {
+            position: relative;
+            margin: 0.5em;
+        }
+        .result {
+            margin: 0.5em;
+        }
+        .padding,
+        .frame {
+            color: rgba(0,0,0,0);
+        }
+        .cursor .frame {
+            outline: 1px solid var(--input-frame);
+        }
+        .match .frame {
+            color: red;
+        }
+        .input,
+        .output,
+        .field,
+        .result {
+            font-size: 1em;
+            font-family: monospace;
+        }
+    </style>
+    <div class="content">
+        <div class="input">
+            <input class="field"></input>
+            <div class="over match">
+                <span class="padding"></span><span class="frame"></span>
+            </div>
+        </div>
+        <div class="output">
+            <input class="field"></input>
+            <div class="over cursor">
+                <span class="padding"></span><span class="frame"></span>
+            </div>
+        </div>
+    </div>
+    <div class="result"><div>
+</template>
+<script src="./p.js"></script>
+<z-presentation tabindex="0">
+    <z-slide active>
+    </z-slide>
+    <z-slide>
+        <h1>Чит-квайны</h1>
+        <ul>
+            <li class="step"><p>Выполнение строк</p><code class="language-js">var a="console.log('var a='+JSON.stringify(a)+';eval(a)')";eval(a)</code></li>
+            <li class="step"><p>Рефлексия</p><code class="language-js">(function x(){console.log('(' + x.toString() + ')()')})()</code></li>
+        </ul>
+    </z-slide>
+    <z-slide centered>
+        <h1 class="bigger">LZ</h1>
+    </z-slide>
+    <z-slide>
+        <h1>LZ77</h1>
+        <z-lz77></z-lz77>
+    </z-slide>
+    <z-slide>
+        <h1>Распаковка LZ77</h1>
+        <z-lz77 unpack></z-lz77>
+    </z-slide>
+    <z-slide>
+        <h1>LZW</h1>
+        <z-lzw></z-lzw>
+    </z-slide>
+    <z-slide>
+        <h1>Распаковка LZW</h1>
+        <z-lzw unpack></z-lzw>
+    </z-slide>
+    <z-slide>
+        <h1>Diff</h1>
+        <z-lzdiff></z-lzdiff>
+    </z-slide>
+</z-presentation>
+<script>
+    focus('z-presentation');
+</script>
